@@ -4,7 +4,7 @@ const port = 7000
 const jsChessEngine = require('js-chess-engine')
 const { move, status, moves, aiMove } = jsChessEngine  
 const axios = require('axios')
-//engine.postMessage("uci");
+const LoadServerURL = "http://127.0.0.1:8001/";
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -41,7 +41,7 @@ function SendUpdateToLoadbalancer(){
     'Authorization': 'valid_token',
     'Port': port
   };
-  axios.post('http://127.0.0.1:8001/aiserver', {
+  axios.post(LoadServerURL + 'aiserver', {
   }, { headers })
   .then((serverRespond) => {
   })
