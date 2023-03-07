@@ -3,7 +3,7 @@ const app = express()
 const port = 7000
 const jsChessEngine = require('js-chess-engine')
 const { move, status, moves, aiMove } = jsChessEngine  
-
+const axios = require('axios')
 //engine.postMessage("uci");
 
 app.use(express.json()) // for parsing application/json
@@ -24,8 +24,6 @@ app.post('/', (request, response) => {
   catch{
     response.send("Fail");
   }
-  
-
 });
 
 app.listen(port, (err) => {
@@ -35,3 +33,18 @@ app.listen(port, (err) => {
 
   console.log(`server is listening on ${port}`)
 })
+
+SendUpdateToLoadbalancer();
+function SendUpdateToLoadbalancer(){
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'valid_token',
+    'Port': port
+  };
+  axios.post('http://127.0.0.1:8001/aiserver', {
+  }, { headers })
+  .then((serverRespond) => {
+  })
+  .catch((error) => {
+  });
+};
