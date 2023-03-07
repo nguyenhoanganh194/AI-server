@@ -8,8 +8,9 @@ const LoadServerURL = "http://127.0.0.1:8001/";
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 app.get('/', (request, response) => {
-  response.send("Hello");
+  response.send("AI server");
 });
 
 
