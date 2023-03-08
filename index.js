@@ -26,26 +26,44 @@ app.post('/', (request, response) => {
     response.send("Fail");
   }
 });
+app.post("/status",(request, response) => {
+  response.send("Oke");
+});
+
+
+app.post('/possibleMove', (request, response) => {
+  try{
+    var nextMove = moves(request.body.fen);
+    response.send(JSON.stringify(nextMove));
+  }
+  catch{
+    response.send("Fail");
+  }
+});
 
 app.listen(port, (err) => {
   if (err) {
     return console.log('something bad happened', err)
-  }
+}
 
   console.log(`server is listening on ${port}`)
 })
 
 SendUpdateToLoadbalancer();
-function SendUpdateToLoadbalancer(){
+
+async function SendUpdateToLoadbalancer(){
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': 'valid_token',
     'Port': port
   };
-  axios.post(LoadServerURL + 'aiserver', {
-  }, { headers })
-  .then((serverRespond) => {
-  })
-  .catch((error) => {
-  });
+  while(true){
+    axios.post(LoadServerURL + 'aiserver', {
+    }, { headers })
+    .then((serverRespond) => {
+    })
+    .catch((error) => {
+    });
+    await new Promise(resolve => setTimeout(resolve, 10*1000));
+  }
 };
